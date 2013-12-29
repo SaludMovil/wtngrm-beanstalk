@@ -82,11 +82,16 @@ class BeanstalkWorkerServiceTest extends \PHPUnit_Framework_TestCase
     public function testDispatch()
     {
         $key = 'test.job';
-        $job = array('id' => $key);
-        $this->object->add($key, $job);
+        $worker = $this->getMock('stdClass', array('execute'));
+
+        $worker->expects($this->any())
+            ->method('execute')
+            ->will($this->returnValue(true));
+
+        $this->object->add($key, $worker);
 
         $this->mock->expects($this->once())
-            ->method('reserve')
+            ->method('delete')
             ->will($this->returnValue($this->mock));
 
         $this->object->dispatch();
@@ -99,13 +104,11 @@ class BeanstalkWorkerServiceTest extends \PHPUnit_Framework_TestCase
     public function testDispatchMultipleJobs()
     {
 
-        $this->mock->expects($this->exactly(5))
-            ->method('watch')
-            ->will($this->returnValue($this->mock));
-
         for ($i = 0 ; $i <= 4 ; $i++) {
             $this->object->add($key . $i, $job[$i]);
         }
 
+        $functions = $this->object->getOption('functions');
+        $this->assertEquals(5, count($functions));
     }
 }

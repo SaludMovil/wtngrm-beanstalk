@@ -6,6 +6,8 @@ class BeanstalkWorkerService extends \Desyncr\Wtngrm\Service\AbstractService
 {
     protected $instance = null;
     protected $job = null;
+    protected $functions = array();
+    protected $sleep_interval = 10;
 
     public function __construct($beanstalk, $options)
     {
@@ -15,12 +17,19 @@ class BeanstalkWorkerService extends \Desyncr\Wtngrm\Service\AbstractService
 
     public function add($function, $worker, $target = null)
     {
-        $this->job = $this->instance
-            ->watch($function);
+        $this->functions[$function][] = $worker;
     }
 
     public function dispatch()
     {
-        $this->job->reserve();
+        foreach ($this->functions as $function => $workers) {
+            foreach ($workers as $worker) {
+                $job = $this->instance->watch($function)->ignore('default');
+
+                $worker->execute($job);
+            }
+            $this->instance->delete($job);
+            usleep($this->sleep_interval);
+        }
     }
 }
