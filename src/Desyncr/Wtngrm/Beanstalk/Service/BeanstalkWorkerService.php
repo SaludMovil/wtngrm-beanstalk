@@ -27,8 +27,9 @@ class BeanstalkWorkerService extends \Desyncr\Wtngrm\Service\AbstractService
                 $job = $this->instance->watch($function)->ignore('default');
 
                 $worker->execute($job);
+
+                $this->instance->delete($job);
             }
-            $this->instance->delete($job);
             usleep($this->sleep_interval);
         }
     }
