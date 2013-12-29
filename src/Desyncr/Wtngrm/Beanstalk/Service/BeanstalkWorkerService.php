@@ -22,11 +22,12 @@ class BeanstalkWorkerService extends \Desyncr\Wtngrm\Service\AbstractService
 
     public function dispatch()
     {
+
         foreach ($this->functions as $function => $workers) {
             foreach ($workers as $worker) {
                 $job = $this->instance->watch($function)->ignore('default');
 
-                $worker->execute($job);
+                $worker->execute($job->getData());
 
                 $this->instance->delete($job);
             }
