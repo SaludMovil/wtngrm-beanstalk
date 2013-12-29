@@ -1,6 +1,6 @@
 {
     "name": "desyncr/wtngrm-beanstalk",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Zend2 Module for Queueing/Background jobs servers - Beanstalk adapter",
     "type": "module",
     "license": "GPL-3.0+",

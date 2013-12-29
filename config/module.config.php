@@ -1,6 +1,24 @@
 <?php
 return array(
-    'factories' => array(
-        'Desyncr\Wtngrm\Beanstalk\Service\BeanstalkService'  => 'Desyncr\Wtngrm\Beanstalk\Factory\BeanstalkServiceFactory'
+    'controllers' => array(
+        'invokables' => array(
+            'Desyncr\Wtngrm\Beanstalk\Controller\Worker' => 'Desyncr\Wtngrm\Beanstalk\Controller\WorkerController'
+        )
+    ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'gearman_worker_route' => array(
+                    'options' => array(
+                        'route' => 'beanstalk worker execute <workerid>',
+                        'defaults' => array(
+                            '__NAMESPACE__' => 'Desyncr\Wtngrm\Beanstalk\Controller',
+                            'controller' => 'Worker',
+                            'action' => 'execute'
+                        )
+                    )
+                )
+            )
+        )
     )
 );

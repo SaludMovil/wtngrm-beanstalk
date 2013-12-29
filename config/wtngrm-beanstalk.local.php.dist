@@ -1,8 +1,25 @@
 <?php
 return array(
+    'service_manager' => array(
+        'factories' => array(
+            'Desyncr\Wtngrm\Beanstalk\Service\BeanstalkService'  => 'Desyncr\Wtngrm\Beanstalk\Factory\BeanstalkServiceFactory'
+            'Desyncr\Wtngrm\Beanstalk\Service\BeanstalkWorkerService'  => 'Desyncr\Wtngrm\Beanstalk\Factory\BeanstalkWorkerServiceFactory'
+        ),
+    ),
     'wtngrm' => array(
         'beanstalk-adapter' => array(
-            'host' =>  '127.0.0.1'
+            'servers' => array(
+                'client' => array(
+                    array('host' =>  '127.0.0.1', 'port' => 11103)
+                    )
+                ),
+                'workers' => array(
+                     array('host' =>  '127.0.0.1', 'port' => 11103)
+                    )
+                )
+            )
+        ),
+        'workers' => array(
         )
     )
 );
