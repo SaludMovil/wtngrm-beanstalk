@@ -4,10 +4,10 @@ use Desyncr\Wtngrm\Service as Wtngrm;
 
 class BeanstalkService extends Wtngrm\AbstractService {
     protected $instance = null;
-    protected $host = '127.0.0.1';
 
-    public function __construct() {
-        $this->instance = new \Pheanstalk_Pheanstalk($this->host);
+    public function __construct($instance, $options) {
+        $this->setOptions($options);
+        $this->instance = $instance;
     }
 
     public function dispatch() {
