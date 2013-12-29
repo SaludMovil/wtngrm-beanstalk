@@ -27,7 +27,7 @@ class BeanstalkServiceFactoryTest extends \PHPUnit_Framework_TestCase
        $beanstalk = array(
            'beanstalk-adapter' => $servers
        );
-       $this->config = array('wtngrm' => $gearman);
+       $this->config = array('wtngrm' => $beanstalk);
 
        $this->object = new BeanstalkServiceFactory;
     }
@@ -49,14 +49,14 @@ class BeanstalkServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $sm = $this->getMockBuilder('Zend\ServiceManager\ServiceLocatorInterface', array('get', 'has'))
                     ->getMock();
 
-        $gearmanMock = $this->getMockBuilder('BeanstalkClient', array('addServers'))->getMock();
-        $gearmanMock->expects($this->any())
+        $beanstalkMock = $this->getMockBuilder('BeanstalkClient', array('addServers'))->getMock();
+        $beanstalkMock->expects($this->any())
             ->method('addServers')
             ->will($this->returnValue(true));
 
         $map = array(
             array('Config', $this->config),
-            array('Desyncr\Wtngrm\Beanstalk\Client\BeanstalkClient', $gearmanMock)
+            array('Desyncr\Wtngrm\Beanstalk\Client\BeanstalkClient', $beanstalkMock)
         );
 
         $sm->expects($this->any())
@@ -79,14 +79,14 @@ class BeanstalkServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $sm = $this->getMockBuilder('Zend\ServiceManager\ServiceLocatorInterface', array('get', 'has'))
                     ->getMock();
 
-        $gearmanMock = $this->getMockBuilder('BeanstalkClient', array('addServers'))->getMock();
-        $gearmanMock->expects($this->any())
+        $beanstalk = $this->getMockBuilder('BeanstalkClient', array('addServers'))->getMock();
+        $beanstalk->expects($this->any())
             ->method('addServer')
             ->will($this->returnValue(true));
 
         $map = array(
             array('Config', $this->config),
-            array('Desyncr\Wtngrm\Beanstalk\Client\BeanstalkClient', $gearmanMock)
+            array('Desyncr\Wtngrm\Beanstalk\Client\BeanstalkClient', $beanstalk)
         );
 
         $sm->expects($this->any())
@@ -95,7 +95,7 @@ class BeanstalkServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $obj = $this->object->createService($sm);
 
-        $this->assertEquals($this->config['wtngrm']['gearman-adapter']['servers'], $obj->servers);
+        $this->assertEquals($this->config['wtngrm']['beanstalk-adapter']['servers'], $obj->servers);
 
     }
 }

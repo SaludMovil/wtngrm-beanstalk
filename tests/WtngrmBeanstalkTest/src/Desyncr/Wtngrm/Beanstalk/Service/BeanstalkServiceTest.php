@@ -89,6 +89,8 @@ class BeanstalkServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchMultipleJobs()
     {
+        $key = 'test.job';
+        $job = array(array(1), array(2), array(3), array(4), array(5));
 
         for ($i = 0 ; $i <= 4 ; $i++) {
             $this->object->add($key . $i, $job[$i]);
